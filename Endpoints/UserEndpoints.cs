@@ -12,18 +12,18 @@ public static class UserEndpoints
             return Results.Ok(users);
         })
         .WithName("GetUsers")
-        .WithSummary("Blabla")
-        .WithDescription("Description")
-        .WithTags("Tags");
+        .WithSummary("Retrieve a list of users")
+        .WithDescription("Retrieves a number of user records from the system.")
+        .WithTags("Users");
 
         app.MapGet("/users/{id:Guid}", async (string id, IUserService service) => {
             var user = await service.GetUserById(id);
             return user is null ? Results.NotFound() : Results.Ok(user);
         })
         .WithName("GetUserById")
-        .WithSummary("User Id")
-        .WithDescription("Get user id from api")
-        .WithTags("Tags");
+        .WithSummary("Retrieve a user by ID")
+        .WithDescription("Retrieves a single user record by its unique identifier (GUID).")
+        .WithTags("Users");
 
         app.MapGet("/users/search", async ([FromQuery(Name = "query")] string searchTerm, IUserService service) =>
         {
@@ -33,8 +33,8 @@ public static class UserEndpoints
                 : Results.NotFound("No users found matching the search criteria.");
         })
         .WithName("SearchUsers")
-        .WithSummary("Search users")
-        .WithDescription("Search users by name, email, phone, or address")
+        .WithSummary("Search for users")
+        .WithDescription("Searches for users by matching the provided query string against name, email, phone, or address.")
         .WithTags("Users");
 
         app.MapPost("/users", async (User user, IUserService service) => {
@@ -42,9 +42,9 @@ public static class UserEndpoints
             return Results.Created($"/users/{createdUser.Id}", createdUser);
         })
         .WithName("CreateUser")
-        .WithSummary("create user")
-        .WithDescription("create user to db")
-        .WithTags("Tags");
+        .WithSummary("Create a new user")
+        .WithDescription("Creates a new user record in the database and returns the newly created user with its generated ID.")
+        .WithTags("Users");
     }
 }
 

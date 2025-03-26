@@ -8,7 +8,6 @@ namespace MyProductionApi.Services;
 
 public class UserService : IUserService
 {
-    //private readonly AppDbContext _db;
     private readonly ICacheService _cache;
     private const int CacheTtlSeconds = 300; // Cache Time-to-live (e.g., 5 minutes)
 
@@ -45,9 +44,9 @@ public class UserService : IUserService
 
     public async Task<List<User>> SearchUsers(string searchTerm) {
 
-        string cacheKey = $"users_ {searchTerm}";
+        string cacheKey = $"users_{searchTerm}";
         var cachedUsers = await _cache.GetAsync<List<User>>(cacheKey);
-        if (cachedUsers != null) {
+        if (cachedUsers?.Count>0) {
             return cachedUsers;
         }
 
