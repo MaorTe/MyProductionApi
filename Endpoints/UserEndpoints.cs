@@ -16,7 +16,7 @@ public static class UserEndpoints
         .WithDescription("Description")
         .WithTags("Tags");
 
-        app.MapGet("/users/{id:Guid}", async (Guid id, IUserService service) => {
+        app.MapGet("/users/{id:Guid}", async (string id, IUserService service) => {
             var user = await service.GetUserById(id);
             return user is null ? Results.NotFound() : Results.Ok(user);
         })
