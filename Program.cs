@@ -11,9 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDbContext<CacheDbContext>(opt =>
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 // Register services (DI)
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICacheService, EfCoreCache>();
