@@ -22,7 +22,6 @@ public class EfCoreCache : ICacheService
             Timestmap = DateTime.UtcNow,
             TTL = ttl
         };
-
         _db.CacheEntries.Add(c);
         await _db.SaveChangesAsync();
     }

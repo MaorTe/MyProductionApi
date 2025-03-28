@@ -7,8 +7,8 @@ public static class UserEndpoints
 {
     public static void MapUserEndpoints(this WebApplication app) {
 
-        app.MapGet("/users", async (IUserService service) => {
-            var users = await service.GetAllUsers(10);
+        app.MapGet("/users", async ([FromQuery(Name = "pageNumber")] string pageNumber, IUserService service) => {
+            var users = await service.GetAllUsers(int.Parse(pageNumber), 10);
             return Results.Ok(users);
         })
         .WithName("GetUsers")

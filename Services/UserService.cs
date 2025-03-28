@@ -16,12 +16,14 @@ public class UserService : IUserService
         _cache = cache;
     }
 
-    public async Task<List<User>> GetAllUsers(int pageSize) {
-        List<User> cachedUsers = await _cache.GetAsync<List<User>>("users");
+    public async Task<List<User>> GetAllUsers(int pageNumber, int pageSize) {
+        string key = $"users_page_{pageNumber}";
+        List<User> cachedUsers = await _cache.GetAsync<List<User>>(key);
+        
         if (cachedUsers != null) return cachedUsers;
 
-        var users = await GetUsersFromApi($"https://randomuser.me/api/?results={pageSize}");
-        await _cache.SetAsync("users", users, 600);
+        var users = await GetUsersFromApi($"https://randomuser.me/api/?page={pageNumber}&results={pageSize}");
+        await _cache.SetAsync(key, users, 600);
         return users;
     }
 
@@ -29,7 +31,6 @@ public class UserService : IUserService
     /// Retrieves a user by id using the "seed" parameter to always return the same user.
     /// </summary>
     public async Task<User?> GetUserById(string id) {
-
         string cacheKey = $"user_{id}";
         var cachedUser = await _cache.GetAsync<User>(cacheKey);
         if (cachedUser != null) {
@@ -38,7 +39,6 @@ public class UserService : IUserService
 
         // Use the "seed" parameter so that the same id always returns the same user.
         string url = $"https://randomuser.me/api/?seed={id}&results=1";
-
         return (await GetUsersFromApi(url)).First();
     }
 

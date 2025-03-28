@@ -19,6 +19,13 @@ builder.Services.AddScoped<ICacheService, EfCoreCache>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowAll",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+});
+
 var app = builder.Build();
 
 // Error handling
@@ -32,6 +39,8 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = string.Empty; // Set Swagger UI at the app's root
     });
 }
+
+app.UseCors("AllowAll");
 app.MapUserEndpoints();
 
 app.Run();
